@@ -9,8 +9,6 @@ description: A blog about software architecture, engineering leadership, and bui
   <a href="{{ '/about/' | relative_url }}">About</a>
 </div>
 
-This site is now a blog instead of a resume.
-
 I use it to write about software architecture, .NET, distributed systems, delivery practices, and the engineering decisions that usually matter more than frameworks.
 
 ## Latest posts

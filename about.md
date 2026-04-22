@@ -12,12 +12,16 @@ permalink: /about/
 
 This blog is a place to publish concise, experience-driven writing about software engineering.
 
-Most posts here will focus on:
+I’ve spent more than 10 years in software, working in areas such as development, testing, architecture, and team leadership. Most of my work has been with Microsoft technologies, and I enjoy building practical, scalable systems.
 
-- software and solution architecture
-- .NET and backend engineering
-- system design tradeoffs
-- engineering leadership and team practices
-- code quality, delivery, and operational discipline
+Lately, I’ve been exploring Go (Golang) and ML.NET out of curiosity and a desire to keep learning.
 
-The goal is simple: write things that are useful to working engineers and worth revisiting later.
+I also work on community projects:
+
+- [dotnet.ge](https://dotnet.ge/) - a .NET-focused community in Georgia
+
+Outside of coding, I enjoy learning about startups, traveling, and meeting people from different cultures.
+
+My GitHub might look like a graveyard, but it’s full of half-finished ideas and hidden startup experiments.
+
+Feel free to check out my repos on [GitHub](https://github.com/gabisonia) or connect.

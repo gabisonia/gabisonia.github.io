@@ -1,0 +1,10 @@
+title: Irakli Gabisonia
+description: Notes on software architecture, engineering leadership, and building reliable systems.
+theme: jekyll-theme-cayman
+show_downloads: false
+url: https://gabisonia.github.io
+baseurl: ""
+permalink: /:categories/:title/
+markdown: kramdown
+kramdown:
+  input: GFM

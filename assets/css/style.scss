@@ -66,6 +66,31 @@ $blockquote-text-color: #52606d;
   box-shadow: 0 6px 18px rgba(22, 61, 86, 0.08);
 }
 
+.home-intro {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid #d8e1e8;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(31, 74, 103, 0.06);
+}
+
+.home-intro-image {
+  width: 84px;
+  height: 84px;
+  object-fit: cover;
+  border-radius: 22px;
+  flex-shrink: 0;
+  box-shadow: 0 8px 18px rgba(22, 61, 86, 0.14);
+}
+
+.home-intro-copy > :last-child {
+  margin-bottom: 0;
+}
+
 .post-list {
   display: grid;
   gap: 1rem;
@@ -112,6 +137,10 @@ $blockquote-text-color: #52606d;
 @media screen and (max-width: 42em) {
   .header-links {
     gap: 0.65rem;
+  }
+
+  .home-intro {
+    align-items: flex-start;
   }
 
   .post-content {

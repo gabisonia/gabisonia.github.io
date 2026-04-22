@@ -9,7 +9,16 @@ description: A blog about software architecture, engineering leadership, and bui
   <a href="{{ '/about/' | relative_url }}">About</a>
 </div>
 
-I use it to write about software architecture, .NET, distributed systems, delivery practices, and the engineering decisions that usually matter more than frameworks.
+<div class="home-intro">
+  <img
+    class="home-intro-image"
+    src="{{ '/assets/img.png' | relative_url }}"
+    alt="Portrait of Irakli Gabisonia"
+  >
+  <div class="home-intro-copy">
+    <p>I use it to write about software architecture, .NET, distributed systems, delivery practices, and the engineering decisions that usually matter more than frameworks.</p>
+  </div>
+</div>
 
 ## Latest posts
 

@@ -16,7 +16,7 @@ description: A blog about software architecture, engineering leadership, and bui
     alt="Portrait of Irakli Gabisonia"
   >
   <div class="home-intro-copy">
-    <p>I use it to write about software architecture, .NET, distributed systems, delivery practices, and the engineering decisions that usually matter more than frameworks.</p>
+    <p>I write about software architecture, .NET, distributed systems, delivery practices, and the engineering decisions that usually matter more than frameworks.</p>
   </div>
 </div>
 

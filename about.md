@@ -24,4 +24,4 @@ Outside of coding, I enjoy learning about startups, traveling, and meeting peopl
 
 My GitHub might look like a graveyard, but it’s full of half-finished ideas and hidden startup experiments.
 
-Feel free to check out my repos on [GitHub](https://github.com/gabisonia) or connect.
+Feel free to check out my repos on [GitHub](https://github.com/gabisonia) or connect on [LinkedIn](https://www.linkedin.com/in/gabisonia/).

@@ -76,7 +76,7 @@ It also gives you a cleaner operating model:
 
 That does not remove all failure modes, but it is usually a much better foundation than hoping the model "just knows" your business context.
 
-## Microsoft.Extensions.VectorData (ME.VD)
+## Microsoft.Extensions.VectorData
 
 `Microsoft.Extensions.VectorData` is a .NET library that gives you a consistent abstraction over vector stores.
 

@@ -3,6 +3,11 @@ layout: default
 ---
 
 <article class="content-column post-content">
+  <div class="home-nav">
+    <a href="{{ '/' | relative_url }}">Home</a>
+    <a href="{{ '/posts/' | relative_url }}">All posts</a>
+  </div>
+
   <p class="post-meta">
     <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
     {% if page.categories and page.categories.size > 0 %}
@@ -12,6 +17,4 @@ layout: default
   </p>
 
   {{ content }}
-
-  <p class="back-link"><a href="{{ '/posts/' | relative_url }}">Browse all posts</a></p>
 </article>

@@ -116,8 +116,33 @@ $blockquote-text-color: #52606d;
   font-size: 0.95rem;
 }
 
-.meta-separator {
-  margin: 0 0.35rem;
+.category-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.45rem 0 0.8rem;
+}
+
+.category-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.65rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid rgba(15, 118, 110, 0.22);
+  border-radius: 999px;
+  background: #eef7f5;
+  color: #0f5f59;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+a.category-tag:hover {
+  border-color: rgba(15, 118, 110, 0.5);
+  color: #0a4541;
+  text-decoration: none;
 }
 
 .post-content {

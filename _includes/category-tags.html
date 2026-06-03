@@ -1,0 +1,21 @@
+{% assign categories = include.categories %}
+{% if categories and categories.size > 0 %}
+<div class="category-tags">
+  {% for category in categories %}
+    {% assign category_url = nil %}
+    {% if category == "ai" %}
+      {% assign category_url = "/ai/" %}
+    {% elsif category == "dsa" %}
+      {% assign category_url = "/dsa/" %}
+    {% elsif category == "blog" %}
+      {% assign category_url = "/notes/" %}
+    {% endif %}
+
+    {% if category_url %}
+      <a class="category-tag" href="{{ category_url | relative_url }}">{{ category }}</a>
+    {% else %}
+      <span class="category-tag">{{ category }}</span>
+    {% endif %}
+  {% endfor %}
+</div>
+{% endif %}

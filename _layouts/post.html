@@ -10,11 +10,9 @@ layout: default
 
   <p class="post-meta">
     <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
-    {% if page.categories and page.categories.size > 0 %}
-      <span class="meta-separator">·</span>
-      {{ page.categories | join: " / " }}
-    {% endif %}
   </p>
+
+  {% include category-tags.html categories=page.categories %}
 
   {{ content }}
 </article>

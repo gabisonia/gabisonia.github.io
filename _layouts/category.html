@@ -1,12 +1,10 @@
 ---
 layout: page
-title: Posts
-description: All blog posts.
-permalink: /posts/
 ---
 
 <div class="home-nav">
   <a href="{{ '/' | relative_url }}">Home</a>
+  <a href="{{ '/posts/' | relative_url }}">All posts</a>
   <a href="{{ '/ai/' | relative_url }}">AI</a>
   <a href="{{ '/dsa/' | relative_url }}">DSA</a>
   <a href="{{ '/notes/' | relative_url }}">Notes</a>
@@ -14,7 +12,9 @@ permalink: /posts/
 </div>
 
 <div class="post-list">
-{% for post in site.posts %}
+{% assign category_posts = site.categories[page.category_slug] %}
+{% if category_posts and category_posts.size > 0 %}
+  {% for post in category_posts %}
   <article class="post-card">
     <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
     <p class="post-card-meta">
@@ -25,5 +25,8 @@ permalink: /posts/
     <p>{{ post.excerpt | strip_html | truncate: 220 }}</p>
     {% endif %}
   </article>
-{% endfor %}
+  {% endfor %}
+{% else %}
+  <p>No {{ page.title }} posts yet.</p>
+{% endif %}
 </div>

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Named Pipes in .NET: A Practical Use Case"
-date: 2026-08-14 10:00:00 +0200
+date: 2026-08-14 09:00:00 +0200
 categories: dotnet architecture ipc
 excerpt: "How named pipes became the communication layer between isolated PDF rendering workers in PdfiumRaster.Orchestrator."
 ---

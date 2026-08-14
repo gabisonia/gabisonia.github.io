@@ -3,7 +3,9 @@
 <div class="category-tags">
   {% for category in categories %}
     {% assign category_url = nil %}
-    {% if category == "ai" %}
+    {% if category == "dotnet" %}
+      {% assign category_url = "/dotnet/" %}
+    {% elsif category == "ai" %}
       {% assign category_url = "/ai/" %}
     {% elsif category == "dsa" %}
       {% assign category_url = "/dsa/" %}

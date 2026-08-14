@@ -6,21 +6,11 @@ description: A blog about software architecture, engineering leadership, and bui
 
 <div class="home-nav">
   <a href="{{ '/posts/' | relative_url }}">All posts</a>
+  <a href="{{ '/dotnet/' | relative_url }}">.NET</a>
   <a href="{{ '/ai/' | relative_url }}">AI</a>
   <a href="{{ '/dsa/' | relative_url }}">DSA</a>
   <a href="{{ '/notes/' | relative_url }}">Notes</a>
   <a href="{{ '/about/' | relative_url }}">About</a>
-</div>
-
-<div class="home-intro">
-  <img
-    class="home-intro-image"
-    src="{{ '/assets/img.png' | relative_url }}"
-    alt="Portrait of Irakli Gabisonia"
-  >
-  <div class="home-intro-copy">
-    <p>I write about software architecture, .NET, distributed systems, delivery practices, and the engineering decisions that usually matter more than frameworks.</p>
-  </div>
 </div>
 
 ## Latest posts

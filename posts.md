@@ -7,6 +7,7 @@ permalink: /posts/
 
 <div class="home-nav">
   <a href="{{ '/' | relative_url }}">Home</a>
+  <a href="{{ '/dotnet/' | relative_url }}">.NET</a>
   <a href="{{ '/ai/' | relative_url }}">AI</a>
   <a href="{{ '/dsa/' | relative_url }}">DSA</a>
   <a href="{{ '/notes/' | relative_url }}">Notes</a>

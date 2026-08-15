@@ -18,18 +18,16 @@ permalink: /about/
   >
   <div class="about-profile-copy">
     <p>This blog is a place to publish concise, experience-driven writing about software engineering.</p>
-    <p>I’ve spent more than 10 years in software, working in areas such as development, testing, architecture, and team leadership. Most of my work has been with Microsoft technologies, and I enjoy building practical, scalable systems.</p>
+    <p>I’ve spent more than 10 years in software. My work has covered development testing architecture and team leadership. Most of it has been with Microsoft technologies. I enjoy building practical systems which can scale.</p>
   </div>
 </div>
-
-Lately, I’ve been exploring Go (Golang) and ML.NET out of curiosity and a desire to keep learning.
 
 I also work on community projects:
 
 - [dotnet.ge](https://dotnet.ge/) - a .NET-focused community in Georgia
 
-Outside of coding, I enjoy learning about startups, traveling, and meeting people from different cultures.
+Some of my talks can be found on the [Dotnet Georgia YouTube channel](https://www.youtube.com/@dotnetGeorgia). They are in Georgian but you are still welcome to check them out.
 
-My GitHub might look like a graveyard, but it’s full of half-finished ideas and hidden startup experiments.
+Outside of coding I enjoy learning about startups. I also like traveling and meeting people from different cultures.
 
-Feel free to check out my repos on [GitHub](https://github.com/gabisonia) or connect on [LinkedIn](https://www.linkedin.com/in/gabisonia/).
+You can find my open-source projects and experiments on [GitHub](https://github.com/gabisonia). You can also connect with me on [LinkedIn](https://www.linkedin.com/in/gabisonia/).

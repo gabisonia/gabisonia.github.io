@@ -3,28 +3,28 @@ layout: post
 title: "Building a RAG System with Microsoft.Extensions.VectorData"
 date: 2026-04-22 16:00:00 +0400
 categories: dotnet ai architecture
-excerpt: "A practical outline for building a retrieval-augmented generation system in .NET using Microsoft.Extensions.VectorData."
+excerpt: "Build a complete RAG pipeline in .NET 10 with Microsoft.Extensions.VectorData, OpenAI and PostgreSQL with pgvector."
 ---
 
 This post is based on my talk at [Dotnet Georgia](https://www.youtube.com/watch?v=17ynh2o21-M).
 
-I wanted to turn that talk into a written version focused on the practical side: what RAG is, why it matters, and how to approach it in .NET with `Microsoft.Extensions.VectorData`.
+I wanted to turn that talk into a written version. The focus is on what RAG is and why it matters. I will also show how to build it in .NET with `Microsoft.Extensions.VectorData`.
 
-Even the smartest AI models do not know who Lacrimosa is. He is my cat. But once I give the model access to my own data through a RAG pipeline, it can answer that question correctly. `RAGrimosa` is a small .NET sample that shows how to make that work in practice.
+Even the smartest AI models do not know who Lacrimosa is. She is my cat. But once I give the model access to my own data through a RAG pipeline, it can answer that question correctly. [RAGrimosa](https://github.com/gabisonia/RAGrimosa) is a small .NET 10 sample that shows the complete path from a local text file to a grounded answer.
 
-## LLMs Are Useful, but Not Reliable by Default
+## LLMs Are Useful but Not Reliable by Default
 
-LLMs changed how we build software. They are good at working with language, summarizing information, generating code, and turning rough input into something structured.
+LLMs changed how we build software. They are good at working with language. They can summarize information and generate code. They can also turn rough input into something structured.
 
 That part is real. The part people often skip is the limitation.
 
-An LLM is not a live system of record. It is a model trained on past data. That means it can sound confident while being outdated, incomplete, or simply wrong.
+An LLM is not a live system of record. It is a model trained on past data. The answer can sound confident while being outdated or incomplete. It can also be wrong.
 
 In practice, the usual failure modes look like this:
 
 - the answer is based on stale information
 - the model invents details that sound plausible
-- the reasoning looks clean, but the result is still wrong
+- the reasoning looks clean but the result is still wrong
 
 This is where patterns like RAG become useful. Instead of asking the model to answer from training data alone, we give it relevant context at request time.
 
@@ -38,7 +38,7 @@ The important idea is distance. If two vectors are close to each other, the sour
 
 ## Embeddings
 
-Embeddings are vectors created from real-world data such as text, code, images, or audio. They capture meaning in a way that makes similarity search possible.
+Embeddings are vectors created from real-world data. This can be text code images or audio. They capture meaning in a way that makes similarity search possible.
 
 For example, two sentences can use different words and still end up with similar embeddings if they mean roughly the same thing.
 
@@ -53,7 +53,7 @@ That matters because RAG depends on finding relevant context fast enough to use 
 
 RAG stands for Retrieval-Augmented Generation.
 
-The idea is simple: before the model answers, the system retrieves relevant information from an external source such as documents, database records, or internal knowledge bases. That retrieved context is then included in the prompt.
+The idea is simple. Before the model answers the system retrieves relevant information from an external source. The source can be a document database or internal knowledge base. That context is then included in the prompt.
 
 A typical flow looks like this:
 
@@ -71,24 +71,24 @@ RAG matters because it solves a very practical problem: most real systems need a
 It also gives you a cleaner operating model:
 
 - you can update the knowledge source without retraining the model
-- you can connect private documents, APIs, or internal data
+- you can connect private documents APIs or internal data
 - you can keep the model layer and the data layer loosely coupled
 
-That does not remove all failure modes, but it is usually a much better foundation than hoping the model "just knows" your business context.
+That does not remove every failure mode. It is still a better foundation than hoping the model "just knows" your business context.
 
 ## Microsoft.Extensions.VectorData
 
 `Microsoft.Extensions.VectorData` is a .NET library that gives you a consistent abstraction over vector stores.
 
-What I like about it is that it feels familiar from a .NET developer's perspective. You work with collections, records, and attributes instead of wiring every provider differently. That makes it easier to experiment early and keep the codebase cleaner when the solution grows.
+It feels familiar from a .NET developer's perspective. You work with collections records and attributes instead of wiring every provider differently. This makes early experiments easier. It also keeps the code cleaner as the solution grows.
 
 ### Core components
 
 The main pieces are straightforward.
 
-`VectorStore` is the entry point. It is responsible for working with collections and gives you a common place to manage vector-backed data.
+`VectorStore` can be used as the entry point when an application needs to work with multiple collections. RAGrimosa keeps the example smaller and injects a typed collection directly.
 
-`VectorStoreCollection<TKey, TRecord>` represents a concrete collection of records. In most cases, a record includes an ID, some metadata, and one or more vector fields.
+`VectorStoreCollection<TKey, TRecord>` represents a concrete collection of records. A record usually has an ID with some metadata and one or more vector fields.
 
 The model is shaped with attributes:
 
@@ -96,22 +96,73 @@ The model is shaped with attributes:
 - `VectorStoreData` marks regular data fields
 - `VectorStoreVector` marks the embedding field used for similarity search
 
-This is not magic, and that is a good thing. The library stays close to the underlying concepts while removing a lot of repetitive plumbing.
+The library stays close to the underlying concepts and removes repetitive plumbing. In RAGrimosa the vector property returns the chunk text. The registered `IEmbeddingGenerator` turns it into an embedding during upsert. It also embeds the user question during search.
 
 If you are building RAG in .NET, that is a good tradeoff.
+
+## How RAGrimosa is structured
+
+The sample has two distinct phases.
+
+During ingestion it:
+
+1. reads `RAGrimosa/data/source.txt`
+2. splits the text into overlapping character-based chunks
+3. gives every chunk a deterministic ID
+4. creates the PostgreSQL collection if needed
+5. upserts the chunks while the embedding generator creates their vectors
+
+During question answering it:
+
+1. embeds the user's question and searches for the five closest chunks by default
+2. formats those chunks into a numbered context block
+3. sends the system prompt with the retrieved context and question to the chat model
+4. prints the answer followed by the source chunk IDs and similarity scores
+
+The application uses the .NET generic host with options validation dependency injection and structured logging. `Program.cs` builds the host and handles `Ctrl+C`. It then resolves `RagOrchestrator` and starts the workflow. The implementation stays in the ingestion and orchestration services.
 
 ## Running the sample locally
 
 I put together a small reference project for this post: [RAGrimosa](https://github.com/gabisonia/RAGrimosa).
 
-It is intentionally simple:
+It is intentionally simple but still runs the complete pipeline:
 
 - a .NET 10 console app
 - Postgres with `pgvector`
 - local text-file ingestion
-- OpenAI for embeddings and chat
+- OpenAI's `text-embedding-3-small` embedding model and `gpt-4o-mini` chat model by default
+- `Microsoft.Extensions.AI` abstractions for embedding and chat clients
+- `Microsoft.Extensions.VectorData` with the Semantic Kernel PostgreSQL connector
 
 The fastest way to run it is with Docker Compose.
+
+The main settings live in `RAGrimosa/appsettings.json`:
+
+```json
+{
+  "OpenAI": {
+    "ApiKey": "",
+    "ChatModel": "gpt-4o-mini",
+    "EmbeddingModel": "text-embedding-3-small"
+  },
+  "Postgres": {
+    "ConnectionString": "Host=db;Database=rag_test;Port=5432;Username=postgres;Password=postgrespw",
+    "CollectionName": "documents"
+  },
+  "Ingestion": {
+    "InputFilePath": "data/source.txt",
+    "ChunkSize": 1200,
+    "ChunkOverlap": 150,
+    "RecreateCollection": true
+  },
+  "Rag": {
+    "SearchResultCount": 5,
+    "SystemPrompt": "You are a helpful research assistant. Answer questions using the provided context snippets and focus on clarity. Do not add citation markers in the response."
+  }
+}
+```
+
+The option classes validate these values when the application starts. A missing API key or connection string fails early instead of much later in the RAG flow.
 
 ### Option 1: run everything with Docker
 
@@ -127,15 +178,19 @@ git clone https://github.com/gabisonia/RAGrimosa.git
 cd RAGrimosa
 ```
 
-Open `RAGrimosa/appsettings.json` and set your OpenAI API key in the `OpenAI` section.
+Set your OpenAI API key. You can put it in the `OpenAI` section of `RAGrimosa/appsettings.json` as shown in the repository README. You can also export it to avoid saving the secret in a file:
+
+```bash
+export OpenAI__ApiKey="your-api-key"
+```
 
 Then start the app:
 
 ```bash
-docker compose run --rm --build app
+docker compose run --rm --build -e OpenAI__ApiKey app
 ```
 
-This starts Postgres, enables `pgvector`, runs ingestion, and then drops you into an interactive prompt:
+The Compose service waits for PostgreSQL to become healthy. The initialization script enables the `vector` extension. The app then runs ingestion and opens an interactive prompt:
 
 ```text
 user >
@@ -143,7 +198,7 @@ user >
 
 At that point you can start asking questions about the ingested file.
 
-### Option 2: run Postgres in Docker, but run the app with `dotnet`
+### Option 2: run Postgres in Docker but run the app with `dotnet`
 
 If you want the database in a container but the app on your machine, use this flow instead.
 
@@ -159,7 +214,12 @@ First start only the database:
 docker compose up -d db
 ```
 
-Then update `RAGrimosa/appsettings.json` so the connection string uses `Host=localhost` instead of `Host=db`.
+Then override the database host and supply the API key without changing the checked-in configuration:
+
+```bash
+export Postgres__ConnectionString="Host=localhost;Database=rag_test;Port=5432;Username=postgres;Password=postgrespw"
+export OpenAI__ApiKey="your-api-key"
+```
 
 After that, run the console app:
 
@@ -168,6 +228,8 @@ dotnet run --project RAGrimosa/RAGrimosa.csproj
 ```
 
 The default setup is small on purpose. That makes it easy to see the RAG pipeline end to end without too much framework noise.
+
+Submit an empty line or press `Ctrl+C` to stop the app. When you are finished remove the Compose resources with `docker compose down`. The named PostgreSQL volume remains. With `RecreateCollection` set to `true` the sample recreates the vector collection on its next startup.
 
 ## What the code looks like
 
@@ -182,7 +244,7 @@ The full repo is here:
 
 ### 1. Define the record that goes into the vector store
 
-The `DocumentChunk` model is where `Microsoft.Extensions.VectorData` starts to feel useful. The record is plain C#, and the attributes make the intent obvious:
+The `DocumentChunk` model is where `Microsoft.Extensions.VectorData` starts to feel useful. The record is plain C# and the attributes make the intent clear:
 
 ```csharp
 internal sealed class DocumentChunk
@@ -204,9 +266,11 @@ internal sealed class DocumentChunk
 }
 ```
 
-That is one of the things I like about this API. The data model stays readable. You do not need a huge amount of provider-specific setup just to describe what should be indexed.
+The data model stays readable. `Id` is the collection key. `Content` `Source` and `ChunkIndex` are stored metadata. `Embedding` is the searchable vector field.
 
-### 2. Register the chat client, embedding client, and vector collection
+The interesting detail is that `Embedding` is a string and not a `ReadOnlyMemory<float>`. Returning `Content` tells the vector data pipeline which text to send to the embedding generator. The 1,536 dimensions match the default `text-embedding-3-small` model. Cosine similarity controls how results are ranked. If the embedding model has a different output size then this dimension must change as well.
+
+### 2. Register the chat client embedding client and vector collection
 
 The project uses a standard host builder and wires everything in one place:
 
@@ -228,16 +292,17 @@ builder.Services.AddPostgresCollection<string, DocumentChunk>(
     postgresConfiguration.ConnectionString);
 ```
 
-That is the core of the setup. One client for embeddings, one for chat, and one typed collection backed by Postgres.
+That is the core of the setup. There is one client for embeddings and another for chat. The typed collection is backed by PostgreSQL. The application code depends on `IEmbeddingGenerator` `IChatClient` and `VectorStoreCollection<string, DocumentChunk>`. It does not depend directly on the OpenAI or pgvector clients.
 
 ### 3. Ingest the source document as chunks
 
-The ingestion service reads the local file, splits it into overlapping chunks, and upserts them into the collection:
+The ingestion service reads the local file and splits it into overlapping chunks. It then upserts them into the collection:
 
 ```csharp
 var fileContent = await File.ReadAllTextAsync(ingestionOptions.InputFilePath, cancellationToken);
 var chunks = SplitIntoChunks(fileContent, ingestionOptions.ChunkSize, ingestionOptions.ChunkOverlap);
 
+var sourceName = Path.GetFileName(ingestionOptions.InputFilePath);
 var records = new List<DocumentChunk>(chunks.Count);
 for (var index = 0; index < chunks.Count; index++)
 {
@@ -254,6 +319,8 @@ await collection.UpsertAsync(records, cancellationToken: cancellationToken);
 ```
 
 This is the part many RAG demos skip over too quickly. Chunking strategy matters. File boundaries matter. Stable IDs matter if you want re-ingestion to behave predictably.
+
+The default chunk size is 1,200 characters with an overlap of 150. IDs use the normalized file name and a zero-padded chunk index such as `source-0000`. Ingesting the same source again updates the existing records instead of producing duplicates.
 
 ### 4. Retrieve context and build the grounded prompt
 
@@ -279,13 +346,24 @@ This is the actual RAG loop in a small amount of code:
 - search for relevant chunks
 - build a grounded prompt
 - send both the question and the retrieved context to the model
+- print the source chunk index and score after the answer
 
-That is the part I wanted the sample to make obvious.
+The model answers without inline citation markers. The console prints the context chunks separately. This makes retrieval visible while you experiment with chunk size overlap and result count.
+
+After asking a question about Lacrimosa the output ends with entries in this shape:
+
+```text
+Context chunks:
+[1] source.txt chunk 2 score=0.842
+[2] source.txt chunk 0 score=0.801
+```
+
+The scores above are illustrative; the actual values depend on the query and embedding model.
 
 
-What I like about RAG is that it solves a very normal engineering problem. The model does not know your private context, your documents, or facts like who Lacrimosa is. You have to give it that context in a way that is structured and repeatable.
+RAG solves a normal engineering problem. The model does not know your private context or your documents. It also does not know facts like who Lacrimosa is. You have to provide that context in a repeatable way.
 
-That is why I like this setup. A small console app, Postgres with `pgvector`, and `Microsoft.Extensions.VectorData` are enough to show the idea clearly. No big abstractions, no unnecessary layers, just the core flow from ingestion to retrieval to answer.
+A small console app with Postgres `pgvector` and `Microsoft.Extensions.VectorData` is enough to show the idea. It only has the core flow from ingestion to retrieval and then to the answer.
 
 
 [Source Code](https://github.com/gabisonia/RAGrimosa)

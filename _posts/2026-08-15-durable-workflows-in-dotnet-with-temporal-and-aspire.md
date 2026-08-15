@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Durable Workflows In .NET With Temporal And Aspire"
-date: 2026-08-16 09:00:00 +0200
+date: 2026-08-15 14:26:00 +0200
 categories: dotnet architecture temporal aspire
 excerpt: "A practical introduction to Temporal using an order workflow built with .NET and Aspire."
 ---
